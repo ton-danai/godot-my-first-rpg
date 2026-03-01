@@ -1,21 +1,19 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
 var cardinal_direction : Vector2 = Vector2.DOWN
 var direction : Vector2 =  Vector2.ZERO
-var move_speed : float = 100.0
-var state : String = "idle"
 
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var sprite : Sprite2D = $Sprite2D
+@onready var state_machine: PlayerStateMachine = $StateMachine
+
+func _ready() -> void:
+	state_machine.init(self)
 
 func _physics_process(delta: float) -> void:
 	direction = Input.get_vector("left", "right", "up", "down")
-	
-	velocity = direction * move_speed
+	state_machine.physics_tick(delta) # ให้มันเรียก curr_state.physic
 	move_and_slide()
-	
-	if set_state() || set_direction() :
-		update_animation()
 
 func set_direction() -> bool:
 	if direction == Vector2.ZERO:
@@ -37,17 +35,11 @@ func set_direction() -> bool:
 	# flip เฉพาะ side (กันหน้าหรือหลังโดน flip)
 	if cardinal_direction == Vector2.LEFT or cardinal_direction == Vector2.RIGHT:
 		sprite.flip_h = cardinal_direction == Vector2.LEFT
+	else: sprite.flip_h = false
 		
 	return true
 
-func set_state() -> bool:
-	var new_state: String = "idle" if direction == Vector2.ZERO else "walk"
-	if new_state == state:
-		return false
-	state = new_state
-	return true
-
-func update_animation() -> void:
+func update_animation(state :String) -> void:
 	animation_player.play(state + "_" + anime_direction())
 
 func anime_direction() -> String:
@@ -57,7 +49,3 @@ func anime_direction() -> String:
 		return "up"
 	else:
 		return "side"
-		
-		
-		
-		

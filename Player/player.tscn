@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://jpu5joq3rboj"]
 
-[ext_resource type="Script" uid="uid://d3k2ouke16qw0" path="res://Player/player.gd" id="1_4ntmi"]
+[ext_resource type="Script" uid="uid://d3k2ouke16qw0" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://ck18iiyw6eims" path="res://Player/Sprites/ExamplePlayerSprite.png" id="1_l8h54"]
+[ext_resource type="Script" uid="uid://dfo0oqq7d27mg" path="res://Player/Scripts/player_state_machine.gd" id="3_btcbx"]
+[ext_resource type="Script" uid="uid://ccjd4pnvypa52" path="res://Player/Scripts/state_idle.gd" id="4_gwnis"]
+[ext_resource type="Script" uid="uid://bkbqgpryk78pt" path="res://Player/Scripts/state_walk.gd" id="5_k53q1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wt17y"]
 
@@ -145,3 +148,12 @@ hframes = 21
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1029684985]
 libraries/ = SubResource("AnimationLibrary_k53q1")
+
+[node name="StateMachine" type="Node" parent="." unique_id=728187991]
+script = ExtResource("3_btcbx")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=1403633136]
+script = ExtResource("4_gwnis")
+
+[node name="Walk" type="Node" parent="StateMachine" unique_id=871465978]
+script = ExtResource("5_k53q1")
